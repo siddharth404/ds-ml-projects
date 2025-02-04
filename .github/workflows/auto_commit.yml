@@ -1,0 +1,32 @@
+name: Auto Commit
+
+on:
+  schedule:
+    - cron: "0 0 * * *" # Runs at midnight every day
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      - name: Install Git
+        run: sudo apt-get install git
+
+      - name: Run auto commit script
+        run: |
+          git config --global user.name 'siddharth404'
+          git config --global user.email 'siddharthkaushik101@gmail.com'
+          python auto_commit.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
